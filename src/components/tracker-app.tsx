@@ -29,6 +29,7 @@ import {
   Sparkles,
   Target,
   Wind,
+  UserRound,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -237,7 +238,7 @@ export function TrackerApp({
           {navItems.map(({ view: navView, href, label, Icon }) => (
             <Link
               key={href}
-              href={href}
+              href={navView === "settings" && !data ? "/onboarding" : href}
               className={`nav-item ${view === navView ? "active" : ""}`}
               onClick={closeNavigation}
               aria-current={view === navView ? "page" : undefined}
@@ -318,17 +319,14 @@ export function TrackerApp({
           </div>
           <div className="topbar-end">
             <AppearanceControls />
-            <span className="connection-badge">
-              <i />
-              {data ? t("Diario personale") : t("Da configurare")}
-            </span>
-            <button
-              className="icon-button"
-              aria-label={t("Come funziona il tracker")}
-              onClick={() => setHelpOpen(true)}
+            <span
+              className="profile-avatar"
+              role="img"
+              aria-label={t("Profilo personale")}
+              title={t("Profilo personale")}
             >
-              <CircleHelp size={17} />
-            </button>
+              <UserRound size={18} strokeWidth={1.6} aria-hidden="true" />
+            </span>
           </div>
         </header>
         <main id="main-content" className="main-content">
@@ -341,7 +339,7 @@ export function TrackerApp({
                 run={run}
               />
             ) : (
-              <Onboarding pending={pending} run={run} />
+              <SetupPrompt onSettings={() => router.push("/onboarding")} />
             )
           ) : (
             <Dashboard
@@ -351,7 +349,9 @@ export function TrackerApp({
               run={run}
               pending={pending}
               calendarRef={calendarRef}
-              onSettings={() => router.push("/impostazioni")}
+              onSettings={() =>
+                router.push(data ? "/impostazioni" : "/onboarding")
+              }
             />
           )}
           <div
@@ -387,9 +387,8 @@ export function TrackerApp({
         <div className="help-content">
           <p>
             {t(
-              "Imposta il consumo abituale e il costo del pacchetto. Poi registra le sigarette durante la giornata con il pulsante",
-            )}{" "}
-            <strong>{t("Registra una sigaretta")}</strong>.
+              "Imposta le tue abitudini iniziali e conferma la giornata nel diario. Le giornate confermate con zero sigarette costruiscono la tua serie senza fumo.",
+            )}
           </p>
           <p>
             {t(
@@ -609,99 +608,7 @@ function SetupForm({
     </form>
   );
 }
-function Onboarding({ pending, run }: { pending: boolean; run: RunAction }) {
-  const { t } = usePreferences();
-  return (
-    <>
-      <div className="page-heading">
-        <div>
-          <h1>
-            {t("Il tuo punto di partenza")}
-            <span className="heading-dot">.</span>
-          </h1>
-          <p>{t("Due numeri per iniziare a dare valore ai tuoi progressi.")}</p>
-        </div>
-        <span className="step-badge">
-          <span>1</span>
-          {t("Primo passo")}
-        </span>
-      </div>
-      <div className="settings-grid">
-        <section className="setup-card settings-card">
-          <div className="section-heading">
-            <span className="eyebrow">
-              <Target size={15} />
-              {t("Le tue abitudini")}
-            </span>
-            <span className="subtle-tag">{t("Circa 30 secondi")}</span>
-          </div>
-          <SetupForm
-            pending={pending}
-            onSave={(values) =>
-              run(
-                () => saveSettings(values),
-                t("Il tuo percorso \u00E8 iniziato. Un giorno alla volta."),
-              )
-            }
-          />
-        </section>
-        <aside className="settings-aside">
-          <div className="intro-dark">
-            <span className="eyebrow">
-              <Wind size={15} />
-              {t("Un giorno alla volta")}
-            </span>
-            <h2>
-              {t("Meno sigarette.")}
-              <br />
-              {t("Pi\u00F9 cose che contano.")}
-            </h2>
-            <p>
-              {t(
-                "Uno spazio per osservare le tue abitudini, riconoscere i progressi e ripartire. Sempre.",
-              )}
-            </p>
-            <div className="orbit-art" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-              <Wind size={45} strokeWidth={1} />
-            </div>
-          </div>
-          <div className="setup-benefits">
-            <div>
-              <CalendarDays size={18} />
-              <span>
-                <strong>{t("Un diario che cresce con te")}</strong>
-                <small>
-                  {t("Registra la giornata e ritrovala nel calendario.")}
-                </small>
-              </span>
-            </div>
-            <div>
-              <Coins size={18} />
-              <span>
-                <strong>{t("Il valore dei piccoli progressi")}</strong>
-                <small>
-                  {t("Scopri quanto risparmi rispetto alle tue abitudini.")}
-                </small>
-              </span>
-            </div>
-            <div>
-              <ShieldCheck size={18} />
-              <span>
-                <strong>{t("Il tuo ritmo, nessun giudizio")}</strong>
-                <small>
-                  {t("Puoi cambiare le impostazioni in ogni momento.")}
-                </small>
-              </span>
-            </div>
-          </div>
-        </aside>
-      </div>
-    </>
-  );
-}
+
 function Dashboard({
   data,
   run,
@@ -722,8 +629,6 @@ function Dashboard({
   const { t, formatDate, euro } = usePreferences();
   const { profile, logs, today } = data;
   const stats = getStats(logs, today);
-  const todayLog = logs.find((log) => log.date === today);
-  const count = todayLog?.count ?? 0;
   const [selected, setSelected] = useState(today);
   const [weeks, setWeeks] = useState(view === "calendar" ? 53 : 26);
   const selectedLog = logs.find((log) => log.date === selected);
@@ -739,7 +644,7 @@ function Dashboard({
   const reduction = weeklyBaseline
     ? Math.max(0, Math.round((weeklyAvoided / weeklyBaseline) * 100))
     : 0;
-  const todayBaseline = todayLog?.baseline ?? profile.cigarettesPerDay;
+
   return (
     <>
       <div className="page-heading">
@@ -766,120 +671,6 @@ function Dashboard({
           {t("Le mie abitudini")}
         </button>
       </div>
-      <section className="daily-banner" aria-label={t("Riepilogo di oggi")}>
-        <div className="banner-copy">
-          <span className="eyebrow">
-            <span className="status-dot" />
-            {t("Il tuo spazio, oggi")}
-          </span>
-          <h2>
-            {!configured
-              ? t("Il tuo prossimo passo comincia oggi.")
-              : todayLog?.confirmed && count === 0
-                ? t("Oggi hai scelto di non fumare.")
-                : count > 0
-                  ? t("Ogni scelta \u00E8 un nuovo inizio.")
-                  : t("Fai spazio a un\u2019abitudine nuova.")}
-          </h2>
-          <p>
-            {!configured
-              ? t(
-                  "Imposta le tue abitudini. Al resto pensiamo un giorno alla volta.",
-                )
-              : todayLog?.confirmed
-                ? t(
-                    "Giornata confermata. Puoi sempre aggiornare il tuo diario.",
-                  )
-                : t(
-                    "Registra come va la giornata. Anche i piccoli passi contano.",
-                  )}
-          </p>
-          <button
-            className="button light"
-            disabled={pending || count >= 200}
-            onClick={() => {
-              if (!configured) {
-                onSettings();
-                return;
-              }
-              setSelected(today);
-              run(
-                () => recordDay({ date: today, operation: "increment" }),
-                t("Una sigaretta registrata per oggi."),
-              );
-            }}
-          >
-            <Plus size={16} />
-            {pending
-              ? t("Salvataggio\u2026")
-              : configured
-                ? t("Registra una sigaretta")
-                : t("Configura il tuo percorso")}
-          </button>
-        </div>
-        <div className="banner-today">
-          <div className="banner-today-heading">
-            <Cigarette size={16} />
-            <span>{t("Il conteggio di oggi")}</span>
-            <span className="today-label">{t("Oggi")}</span>
-          </div>
-          <div className="today-number">
-            <strong>
-              {configured ? count.toString().padStart(2, "0") : "—"}
-            </strong>
-            <span>
-              {t("sigarette")}
-              <br />
-              {t("registrate")}
-            </span>
-            <button
-              className="dark-icon-button"
-              disabled={pending || count === 0}
-              onClick={() =>
-                run(
-                  () => recordDay({ date: today, operation: "decrement" }),
-                  t("Conteggio di oggi aggiornato."),
-                )
-              }
-              aria-label={t("Annulla una sigaretta di oggi")}
-            >
-              <Minus size={18} />
-            </button>
-          </div>
-          <div
-            className="today-meter"
-            aria-label={t(
-              "{count} sigarette su una media abituale di {baseline}",
-              { count, baseline: todayBaseline },
-            )}
-          >
-            <span
-              style={{
-                width: `${todayBaseline ? Math.min(100, (count / todayBaseline) * 100) : 0}%`,
-              }}
-            />
-          </div>
-          <div className="banner-today-foot">
-            <span>
-              {configured
-                ? t("La tua media: {count} al giorno", { count: todayBaseline })
-                : t("Il punto di partenza lo scegli tu")}
-            </span>
-            <span>
-              {todayLog?.confirmed ? (
-                <>
-                  <Check size={12} />
-                  {t("Confermato")}
-                </>
-              ) : configured ? (
-                t("Da confermare")
-              ) : (
-                t("Da configurare")
-              )}
-            </span>
-          </div>
-        </div>
-      </section>
       <section className="stats-grid" aria-label={t("I tuoi progressi")}>
         <StatCard
           label={t("Risparmio stimato")}
@@ -1180,7 +971,8 @@ function Heatmap({
       ArrowDown: 1,
       ArrowLeft: -7,
       ArrowRight: 7,
-      Home: dates.findIndex((date) => date >= firstEntry && date >= start) - index,
+      Home:
+        dates.findIndex((date) => date >= firstEntry && date >= start) - index,
       End: dates.indexOf(today) - index,
     };
     if (!(event.key in directions)) return;
@@ -1247,7 +1039,10 @@ function Heatmap({
                   disabled={disabled}
                   tabIndex={
                     !disabled &&
-                    date === (selected >= firstEntry && dates.includes(selected) ? selected : today)
+                    date ===
+                      (selected >= firstEntry && dates.includes(selected)
+                        ? selected
+                        : today)
                       ? 0
                       : -1
                   }
@@ -1462,10 +1257,10 @@ function SettingsView({
           </h1>
           <p>{t("Il punto di partenza per misurare ogni progresso.")}</p>
         </div>
-        <span className="subtle-tag">
-          <ShieldCheck size={13} />
-          {t("Il tuo profilo")}
-        </span>
+        <Link href="/onboarding" className="button secondary">
+          <Wind size={15} />
+          {t("Configurazione guidata")}
+        </Link>
       </div>
       <div className="settings-grid">
         <section className="setup-card settings-card">

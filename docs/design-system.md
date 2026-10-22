@@ -39,3 +39,11 @@ I controlli in alto a destra permettono di scegliere tema chiaro/scuro e lingua 
 La griglia si sviluppa dalla prima giornata registrata verso i mesi successivi. Un diario vuoto parte da oggi. L’allineamento rimane lunedì–domenica, ma le celle precedenti alla prima registrazione sono invisibili. Lo scorrimento mantiene visibile la selezione senza spostarsi automaticamente alla fine dei mesi futuri.
 
 Il reset si trova nelle impostazioni: un dialog esplicita i dati eliminati e offre Annulla / Azzera e ricomincia. Durante la richiesta i controlli sono disabilitati; in caso di errore il dialog rimane aperto. Abitudini, tema e lingua vengono mantenuti.
+
+## Panoramica essenziale
+
+La panoramica inizia con le card di risparmio stimato, sigarette evitate, giorni senza fumo e serie attuale, subito sotto il titolo. Il pannello principale con il conteggio delle sigarette è stato rimosso; le registrazioni rimangono nel diario. La barra superiore contiene tema, lingua e un placeholder circolare del profilo, senza badge “Diario personale” né pulsante di aiuto. La guida resta accessibile dalla sidebar.
+
+## Onboarding guidato
+
+La pagina `/onboarding` usa un layout dedicato, con pannello corallo e illustrazione vettoriale dei polmoni. Quattro passaggi: benvenuto, consumo abituale con selettore circolare, prezzo/dimensione del pacchetto e riepilogo. La cifra mensile è una stima economica sulle abitudini inserite, senza piani o affermazioni mediche. I dati restano in memoria tra i passaggi e vengono salvati soltanto alla conferma finale. Gli utenti esistenti possono riaprire il flusso da “Configurazione guidata” nelle impostazioni.

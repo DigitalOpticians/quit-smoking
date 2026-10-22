@@ -1,6 +1,50 @@
 export type Locale = "it" | "en";
 
 export const english: Record<string, string> = {
+  Benvenuto: "Welcome",
+  "Il pacchetto": "Your pack",
+  "Un nuovo inizio, un respiro alla volta.":
+    "A fresh start, one breath at a time.",
+  "Non devi cambiare tutto in un giorno. Partiamo da te e dalle tue abitudini.":
+    "You don't have to change everything in one day. Let's start with you and your habits.",
+  "La tua media prima di iniziare: ci aiuterà a dare un valore ai tuoi progressi.":
+    "Your average before you start helps us put a value on your progress.",
+  "Quanto costa il tuo pacchetto?": "How much does your pack cost?",
+  "Due dettagli per stimare quanto puoi risparmiare scegliendo di non fumare.":
+    "Two details to estimate how much you could save by choosing not to smoke.",
+  "Il tuo percorso comincia da qui.": "Your journey starts here.",
+  "Nessun obiettivo impossibile. Solo la prossima giornata senza fumo.":
+    "No impossible goals. Just your next smoke-free day.",
+  "Più spazio per ciò che conta.": "More room for what matters.",
+  "Il primo passo è già un cambiamento.": "The first step is already a change.",
+  "Il tuo ritmo. Il tuo nuovo inizio.": "Your pace. Your fresh start.",
+  "Passaggi di configurazione": "Setup steps",
+  "Un diario per riconoscere ogni piccolo progresso.":
+    "A journal to recognise every small step forward.",
+  "Puoi sempre correggere una giornata e ricominciare.":
+    "You can always update a day and start again.",
+  "Bastano pochi dettagli. Nessun account da creare.":
+    "Just a few details. No account needed.",
+  "Consumo abituale giornaliero": "Usual daily consumption",
+  "al giorno": "a day",
+  "Una stima su 30 giorni, basata sulle tue abitudini attuali.":
+    "A 30-day estimate based on your current habits.",
+  "Consumo di partenza": "Starting consumption",
+  "Ogni mese senza fumo può valere": "Each smoke-free month could save",
+  "Risparmio stimato rispetto alle tue abitudini iniziali.":
+    "Estimated savings compared with your starting habits.",
+  "Conferma le giornate senza fumo nel diario. Al resto, un passo alla volta.":
+    "Confirm your smoke-free days in the journal. Take the rest one step at a time.",
+  Indietro: "Back",
+  "Torna alla panoramica": "Back to overview",
+  "Salva e torna alla panoramica": "Save and return to overview",
+  Continua: "Continue",
+  "Le tue abitudini restano nel tuo diario personale.":
+    "Your habits stay in your personal journal.",
+  "Configurazione guidata": "Guided setup",
+  "Profilo personale": "Personal profile",
+  "Imposta le tue abitudini iniziali e conferma la giornata nel diario. Le giornate confermate con zero sigarette costruiscono la tua serie senza fumo.":
+    "Set your starting habits and confirm your day in the journal. Confirmed days with zero cigarettes build your smoke-free streak.",
   "Ricomincia il percorso": "Restart your journey",
   "Azzera diario e statistiche per ripartire da oggi. Le tue abitudini, il tema e la lingua rimangono salvati.":
     "Reset your journal and statistics to start again today. Your habits, theme and language will be kept.",

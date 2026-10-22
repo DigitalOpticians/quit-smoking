@@ -44,6 +44,7 @@ export async function saveSettings(input: {
       .where(eq(profiles.id, existing.id))
       .returning()
       .get();
+    revalidatePath("/", "layout");
     return { data: trackerData(profile) };
   }
 
@@ -64,6 +65,7 @@ export async function saveSettings(input: {
     path: "/",
     maxAge: 60 * 60 * 24 * 365,
   });
+  revalidatePath("/", "layout");
   return { data: trackerData(profile) };
 }
 

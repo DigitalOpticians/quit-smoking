@@ -7,7 +7,7 @@ Base del progetto con Next.js 16, React 19, TypeScript, App Router, Tailwind CSS
 Usare Node.js 24 (vedi `.nvmrc`) e npm.
 
 ```sh
-npm ci
+npm install
 cp .env.example .env.local
 npm run db:migrate
 npm run dev
@@ -119,3 +119,7 @@ Per il workflow concordato, eseguire soltanto `npm run typecheck` durante le mod
 In Impostazioni, “Azzera il diario” apre una conferma prima di eliminare le registrazioni del solo profilo corrente. Il reset azzera statistiche e serie e aggiorna la data di inizio a oggi; mantiene abitudini, cookie, tema e lingua. Non è annullabile.
 
 Il calendario parte dalla prima registrazione effettiva, oppure da oggi se è vuoto, e si estende in avanti per il periodo selezionato. Le celle di allineamento precedenti alla prima registrazione sono nascoste. I giorni futuri restano disabilitati; quando il periodo iniziale è trascorso, la finestra scorre per includere la settimana corrente.
+
+## Onboarding
+
+La configurazione guidata è disponibile in `/onboarding`: benvenuto, consumo giornaliero, dettagli del pacchetto e riepilogo. Il collegamento nelle impostazioni permette anche di aggiornare un profilo esistente, mantenendo gli snapshot delle giornate passate. L'interfaccia include tema scuro, traduzioni italiano/inglese e un'illustrazione SVG locale; non richiede asset o servizi esterni.
